@@ -3,7 +3,8 @@ to the line in agents_parameter.csv
 """
 from abcEconomics import Simulation
 from dealer import Dealer
-from addict import Addict
+from user import User
+from user import User
 
 
 simulation_parameters = {'name': 'name',
@@ -18,21 +19,22 @@ def main(simulation_parameters):
 
     try:
         dealers = simulation.build_agents(Dealer, 'dealer', 2)
-        addicts = simulation.build_agents(Addict, 'addict', 2)
+        users = simulation.build_agents(User, 'user', 2)
 
         for r in range(simulation_parameters['rounds']):
+            print("----------------", r ,"-------------------")
             simulation.advance_round(r)
-            addicts.refresh_services('labor', derived_from='labor_endowment', units=5)
+            users.refresh_services('labor', derived_from='labor_endowment', units=5)
             # to access round, just get the value of w.round
             # to access its datetime version, use w._round # todo, better naming
-            addicts.sell_labor() 
+            users.sell_labor() 
             dealers.buy_inputs() 
             dealers.production()
-            dealers.panel_log(goods=['some_crack'])
+            dealers.panel_log(goods=['substance'])
             dealers.sell_goods()
-            addicts.buy_goods()
-            addicts.panel_log(goods=['some_crack'])
-            addicts.consumption()
+            users.buy_goods()
+            users.panel_log(goods=['substance'])
+            users.consumption()
     
     finally:
         simulation.finalize()
